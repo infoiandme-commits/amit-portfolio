@@ -13,6 +13,34 @@ export default function AmitPortfolio() {
   const [displayedCode, setDisplayedCode] = useState('');
   const [navOpen, setNavOpen] = useState(false);
   const [formData, setFormData] = useState({ business: '', name: '', mobile: '' });
+
+  const submitProject = async () => {
+  try {
+    const response = await fetch("https://formspree.io/f/XXXXXXXX", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        service: activeService?.name,
+        business: formData.business,
+        name: formData.name,
+        mobile: formData.mobile,
+      }),
+    });
+
+    if (response.ok) {
+      setStep(3);
+    } else {
+      alert("Failed to submit form");
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Something went wrong");
+  }
+};
+
+  
   const [glitchActive, setGlitchActive] = useState(false);
 
   const fullCode = `// Initializing Neural Interface...
@@ -688,7 +716,7 @@ amit.buildWebsite({
                 <h3 style={{ fontSize: '28px', fontWeight: '700', margin: '12px 0 28px', fontFamily: 'Orbitron, sans-serif' }}>Almost There</h3>
                 <input type="text" placeholder="Your Name" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
                 <input type="tel" placeholder="Mobile Number" value={formData.mobile} onChange={e => setFormData({ ...formData, mobile: e.target.value })} />
-                <button className="btn-primary" style={{ width: '100%', marginTop: '8px' }} onClick={() => setStep(3)}>Submit 🚀</button>
+                <button className="btn-primary" style={{ width: '100%', marginTop: '8px' }} onClick={submitProject}>Submit 🚀</button>
               </div>
             )}
             {step === 3 && (
